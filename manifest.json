@@ -1,0 +1,24 @@
+{
+  "name": "Fox Quest — Letters & Numbers",
+  "short_name": "Fox Quest",
+  "description": "A learning game for kids covering letters, numbers, and simple math.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#BFEBFF",
+  "theme_color": "#4FC3F7",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
