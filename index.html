@@ -5,28 +5,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Yumbuni ECD — Letters &amp; Numbers</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4FC3F7">
+<meta name="theme-color" content="#2E8B57">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --sky:#4FC3F7;
-    --sky-deep:#0FA3D9;
-    --sun:#FFC93C;
-    --coral:#FF6F5E;
-    --leaf:#5FBF6E;
-    --cream:#FFF8E9;
-    --ink:#2E2A24;
+    --yellow:#FFC72C;
+    --yellow-deep:#E0A800;
+    --green:#2E8B57;
+    --green-deep:#1B5E3A;
+    --alert:#D64545;
+    --alert-deep:#B23333;
+    --cream:#FFFDF5;
+    --ink:#231F1B;
     --ink-soft:#6b6457;
     --white:#ffffff;
-    --shadow: rgba(46,42,36,0.18);
+    --shadow: rgba(35,31,27,0.18);
   }
   *{box-sizing:border-box;}
   html,body{
     margin:0; padding:0; height:100%;
-    background: linear-gradient(180deg, #BFEBFF 0%, var(--cream) 55%);
+    background: linear-gradient(180deg, #EAF7EE 0%, var(--cream) 55%);
     font-family:'Fredoka', sans-serif;
     color:var(--ink);
     -webkit-tap-highlight-color: transparent;
@@ -50,7 +51,7 @@
     font-family:'Baloo 2', sans-serif;
     font-weight:800;
     font-size:22px;
-    color:var(--sky-deep);
+    color:var(--green-deep);
     display:flex; align-items:center; gap:8px;
   }
   .brand .fox{ font-size:28px; }
@@ -97,9 +98,9 @@
   .mode-card .emoji{ font-size:30px; }
   .mode-card .txt strong{ display:block; font-size:18px; font-weight:700; }
   .mode-card .txt span{ font-size:13px; color:var(--ink-soft); }
-  #mode-easy{ background:#DFF6FF; border:3px solid var(--sky); }
-  #mode-medium{ background:#FFF4D6; border:3px solid var(--sun); }
-  #mode-hard{ background:#FFE3E0; border:3px solid var(--coral); }
+  #mode-easy{ background:#FFF6D9; border:3px solid var(--yellow); }
+  #mode-medium{ background:#E3F3E8; border:3px solid var(--green); }
+  #mode-hard{ background:#F0EFEA; border:3px solid var(--ink); }
 
   /* ---------- Game screen ---------- */
   #game{ gap:18px; }
@@ -131,14 +132,14 @@
     font-family:'Baloo 2', sans-serif;
     font-weight:800;
     font-size:56px;
-    color:var(--sky-deep);
+    color:var(--green-deep);
     line-height:1;
   }
   .speak-btn{
-    border:none; background:var(--sun); color:var(--ink);
+    border:none; background:var(--yellow); color:var(--ink);
     font-family:'Fredoka'; font-weight:600; font-size:15px;
     padding:10px 20px; border-radius:999px; cursor:pointer;
-    box-shadow:0 4px 0 #E0A928;
+    box-shadow:0 4px 0 var(--yellow-deep);
     display:flex; align-items:center; gap:8px;
   }
   .speak-btn:active{ transform:translateY(3px); box-shadow:none; }
@@ -158,10 +159,10 @@
   }
   .ball{
     width:18px; height:18px; border-radius:50%;
-    background:var(--coral);
+    background:var(--yellow-deep);
     box-shadow:inset 0 -2px 0 rgba(0,0,0,0.15);
   }
-  .ball.b-group{ background:var(--sky-deep); }
+  .ball.b-group{ background:var(--green); }
   .ball.removed{
     background:transparent;
     border:2px dashed #C8C1AF;
@@ -169,9 +170,9 @@
   }
   .stick{
     width:6px; height:22px; border-radius:3px;
-    background:var(--coral);
+    background:var(--yellow-deep);
   }
-  .stick.b-group{ background:var(--sky-deep); }
+  .stick.b-group{ background:var(--green); }
   .stick.removed{
     background:transparent;
     border:2px dashed #C8C1AF;
@@ -190,8 +191,8 @@
     transition:transform .08s ease, background .15s ease;
   }
   .choice-btn:active{ transform:translateY(3px); box-shadow:0 2px 0 var(--shadow); }
-  .choice-btn.correct{ background:var(--leaf); color:white; box-shadow:0 5px 0 #3C8F49; }
-  .choice-btn.wrong{ background:var(--coral); color:white; box-shadow:0 5px 0 #C94A3C; }
+  .choice-btn.correct{ background:var(--green); color:white; box-shadow:0 5px 0 var(--green-deep); }
+  .choice-btn.wrong{ background:var(--alert); color:white; box-shadow:0 5px 0 var(--alert-deep); }
   .choice-btn[disabled]{ opacity:0.55; }
 
   /* Hard mode input */
@@ -204,12 +205,12 @@
     border:3px solid #E3DDCB; border-radius:16px; padding:14px;
     background:var(--white); color:var(--ink);
   }
-  .answer-input:focus{ outline:none; border-color:var(--sky); }
+  .answer-input:focus{ outline:none; border-color:var(--yellow-deep); }
   .submit-btn{
-    border:none; border-radius:16px; background:var(--coral); color:white;
+    border:none; border-radius:16px; background:var(--green); color:white;
     font-family:'Fredoka'; font-weight:600; font-size:18px;
     padding:0 24px; cursor:pointer;
-    box-shadow:0 4px 0 #C94A3C;
+    box-shadow:0 4px 0 var(--green-deep);
   }
   .submit-btn:active{ transform:translateY(3px); box-shadow:none; }
 
@@ -220,10 +221,10 @@
   .feedback.bad{ color:#D64B3B; }
 
   .next-btn{
-    border:none; background:var(--sky-deep); color:white;
+    border:none; background:var(--green-deep); color:white;
     font-family:'Fredoka'; font-weight:600; font-size:16px;
     padding:14px; border-radius:16px; cursor:pointer;
-    box-shadow:0 4px 0 #0A7CA8;
+    box-shadow:0 4px 0 #12432A;
   }
   .next-btn:active{ transform:translateY(3px); box-shadow:none; }
   .hidden{ display:none !important; }
