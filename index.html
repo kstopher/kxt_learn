@@ -8,8 +8,20 @@
 <meta name="theme-color" content="#2E8B57">
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  @font-face{
+    font-family:'Fredoka';
+    src: url('font-fredoka.ttf') format('truetype-variations'), url('font-fredoka.ttf') format('truetype');
+    font-weight: 300 700;
+    font-display: swap;
+  }
+  @font-face{
+    font-family:'Baloo 2';
+    src: url('font-baloo2.ttf') format('truetype-variations'), url('font-baloo2.ttf') format('truetype');
+    font-weight: 400 800;
+    font-display: swap;
+  }
+</style>
 <style>
   :root{
     --yellow:#FFC72C;
@@ -363,18 +375,30 @@ function startGame(m){
   nextRound();
 }
 
-function speak(text){
-  if(!('speechSynthesis' in window)) return;
-  window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.rate = 0.85;
-  u.pitch = 1.1;
-  window.speechSynthesis.speak(u);
+let currentAudio = null;
+
+function playQueue(tokens){
+  if(!tokens || !tokens.length) return;
+  if(currentAudio){
+    currentAudio.onended = null;
+    currentAudio.pause();
+  }
+  const audio = new Audio();
+  currentAudio = audio;
+  let i = 0;
+  function step(){
+    if(i >= tokens.length) return;
+    audio.src = 'audio-' + tokens[i] + '.mp3';
+    audio.play().catch(() => {});
+    i++;
+  }
+  audio.onended = step;
+  step();
 }
 
 function speakPrompt(){
   if(!current) return;
-  speak(current.spoken);
+  playQueue(current.audioPrompt);
 }
 
 function randInt(min, max){
@@ -408,7 +432,8 @@ function buildEasyRound(){
     return {
       label: "Which letter is this?",
       display: "🔊",
-      spoken: "Find the letter " + answer,
+      audioPrompt: ["phrase_find_letter", "letter_" + answer.toLowerCase()],
+      answerAudio: ["letter_" + answer.toLowerCase()],
       answer: answer,
       choices: choices,
       counters: null
@@ -424,7 +449,8 @@ function buildEasyRound(){
     return {
       label: "Which number is this?",
       display: "🔊",
-      spoken: "Find the number " + answer,
+      audioPrompt: ["phrase_find_number", "num_" + answer],
+      answerAudio: ["num_" + answer],
       answer: String(answer),
       choices: choices.map(String),
       counters: null
@@ -437,7 +463,8 @@ function buildEasyRound(){
     return {
       label: "Which shape is this?",
       display: "🔊",
-      spoken: "Find the " + correctShape.name,
+      audioPrompt: ["phrase_find_shape", "shape_" + correctShape.name],
+      answerAudio: ["shape_" + correctShape.name],
       answer: correctShape.emoji,
       choices: choiceShapes.map(s => s.emoji),
       counters: null
@@ -462,7 +489,8 @@ function buildMediumRound(){
   return {
     label: "Solve it!",
     display: `${x} ${useAdd ? '+' : '−'} ${y}`,
-    spoken: `${x} ${spokenOp} ${y}`,
+    audioPrompt: ["num_" + x, "op_" + (useAdd ? "plus" : "minus"), "num_" + y],
+    answerAudio: ["num_" + answer],
     answer: String(answer),
     choices: choices.map(String),
     counters: { x, y, useAdd }
@@ -472,18 +500,19 @@ function buildMediumRound(){
 function buildHardRound(){
   const ops = ['+', '−', '×'];
   const op = ops[randInt(0, ops.length - 1)];
-  let a, b, answer, spokenOp;
+  let a, b, answer, opToken;
   if(op === '+'){
-    a = randInt(1, 20); b = randInt(1, 20); answer = a + b; spokenOp = "plus";
+    a = randInt(1, 20); b = randInt(1, 20); answer = a + b; opToken = "plus";
   } else if(op === '−'){
-    a = randInt(5, 20); b = randInt(1, a); answer = a - b; spokenOp = "minus";
+    a = randInt(5, 20); b = randInt(1, a); answer = a - b; opToken = "minus";
   } else {
-    a = randInt(1, 10); b = randInt(1, 10); answer = a * b; spokenOp = "times";
+    a = randInt(1, 10); b = randInt(1, 10); answer = a * b; opToken = "times";
   }
   return {
     label: "Type the answer",
     display: `${a} ${op} ${b}`,
-    spoken: `${a} ${spokenOp} ${b}`,
+    audioPrompt: ["num_" + a, "op_" + opToken, "num_" + b],
+    answerAudio: ["num_" + answer],
     answer: String(answer),
     choices: null,
     counters: null
@@ -523,7 +552,7 @@ function nextRound(){
     renderChoices();
   }
 
-  speak(current.spoken);
+  playQueue(current.audioPrompt);
 }
 
 function renderChoices(){
@@ -564,12 +593,12 @@ function handleResult(correct){
     streak += 1;
     feedbackEl.textContent = "Great job! 🎉";
     feedbackEl.className = 'feedback good';
-    speak("Great job!");
+    playQueue(["phrase_great_job"]);
   } else {
     streak = 0;
     feedbackEl.textContent = `Not quite — it was ${current.answer}`;
     feedbackEl.className = 'feedback bad';
-    speak("Nice try. The answer was " + current.answer);
+    playQueue(["phrase_nice_try", ...current.answerAudio]);
   }
   scoreDisplay.textContent = score;
   streakDisplay.textContent = streak;
